@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TodoItem from '../todo-item/TodoItem'
 
-function TodoList({todos, editFunc, deleteFunc, selectFunc}) {
+function TodoList({todos, editFunc, deleteFunc, selectFunc, completeFunc}) {
     let todoItems = todos.map((todo, index) => {
         return (
             <TodoItem
@@ -12,6 +12,7 @@ function TodoList({todos, editFunc, deleteFunc, selectFunc}) {
                 editFunc={editFunc}
                 deleteFunc={deleteFunc}
                 selectFunc={selectFunc}
+                completeFunc={completeFunc}
             />
         );
     });
@@ -27,7 +28,8 @@ TodoList.propTypes = {
     todos: PropTypes.array.isRequired,
     editFunc: PropTypes.func.isRequired,
     deleteFunc: PropTypes.func.isRequired,
-    selectFunc: PropTypes.func.isRequired
+    selectFunc: PropTypes.func.isRequired,
+    completeFunc: PropTypes.func.isRequired
 };
 
 export default TodoList;

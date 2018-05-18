@@ -15,6 +15,7 @@ export default class TodoItem extends Component {
         this.onHandleKeyUpFn = this.onHandleKeyUp.bind(this);
         this.onStopEditingFn = this.onStopEditing.bind(this);
         this.onEditFn = this.onEdit.bind(this);
+        this.onToggleCompletedFn = this.onToggleCompleted.bind(this);
 
         this.state = {
             isEdit: false
@@ -22,7 +23,7 @@ export default class TodoItem extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        return (nextProps.todo.id !== this.props.todo.id) || this.state.isEdit !== nextState.isEdit;
+        return (nextProps.todo.id !== this.props.todo.id) || (this.state.isEdit !== nextState.isEdit) || (nextProps.todo.completed !== this.props.todo.completed) ;
     }
 
     onHandleKeyUp(event){
@@ -40,7 +41,7 @@ export default class TodoItem extends Component {
             this.setState({isEdit : true});
         } else {
             const content = event.target.value;
-            this.props.editFunc(this.props.todo.id, content);
+            this.props.editFunc(content);
             this.setState({isEdit : false});
         }
     }
@@ -56,6 +57,12 @@ export default class TodoItem extends Component {
 
     onEdit() {
         this.setState({isEdit: true});
+    }
+
+    onToggleCompleted() {
+        const todo = this.props.todo;
+        this.props.selectFunc(this.props.index);
+        this.props.completeFunc(!todo.completed);
     }
 
     renderTitle(task) {
@@ -83,16 +90,23 @@ export default class TodoItem extends Component {
     render() {
         console.log('render : '+ this.props.todo.content);
         const editing = this.state.isEdit;
-        console.log(editing);
         const task = this.props.todo;
 
         let containerClasses = classNames('task-item', {
-            // 'task-item--completed': task.completed,
+            'task-item--completed': task.completed,
             'task-item--editing': editing
         });
 
         return (
             <div className={containerClasses}>
+                <div className="cell">
+                    <Button
+                        className={classNames('btn--icon', 'task-item__button', {'active': task.completed, 'hide': editing})}
+                        onClick={this.onToggleCompletedFn}>
+                        <Icon name="done" />
+                    </Button>
+                </div>
+
                 <div className="cell">
                     {editing ? this.renderTitleInput(task) : this.renderTitle(task)}
                 </div>
@@ -123,5 +137,6 @@ TodoItem.propTypes = {
     index: PropTypes.number.isRequired,
     editFunc: PropTypes.func.isRequired,
     deleteFunc: PropTypes.func.isRequired,
-    selectFunc: PropTypes.func.isRequired
+    selectFunc: PropTypes.func.isRequired,
+    completeFunc: PropTypes.func.isRequired
 };

@@ -8,7 +8,7 @@ export default class Todo extends Component {
         super(props);
 
         /**
-         * { todos : [{ id : number, content: string, complete : boolean }] }
+         * { todos : [{ id : number, content: string, completed : boolean }] }
          */
         this.state = {
             todos: []
@@ -21,6 +21,7 @@ export default class Todo extends Component {
         this.handleRemovedDataFn = this.handleRemovedData.bind(this);
         this.handleEditDataFn = this.handleEditData.bind(this);
         this.handleSelectFn = this.handleSelect.bind(this);
+        this.handleCompleteDataFn = this.handleCompleteData.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -32,13 +33,14 @@ export default class Todo extends Component {
         this.selectedKey = idx;
     }
 
-    handleAddedData(todo) {
+    handleAddedData(content) {
         this.setState({
             todos: update(this.state.todos, {
                 $push: [
                     {
                         id: String(Date.now()),
-                        content: todo,
+                        content: content,
+                        completed: false,
                         isEdit: false
                     }
                 ]
@@ -55,7 +57,7 @@ export default class Todo extends Component {
         this.handleSelect(-1);
     }
 
-    handleEditData(id, content) {
+    handleEditData(content) {
         this.setState({
             todos: update(this.state.todos, {
                 [this.selectedKey] : {
@@ -65,6 +67,16 @@ export default class Todo extends Component {
             })
         });
         this.handleSelect(-1); //reset
+    }
+
+    handleCompleteData(completed) {
+        this.setState({
+            todos: update(this.state.todos, {
+                [this.selectedKey] : {
+                    completed : {$set: completed}
+                }
+            })
+        })
     }
 
     render() {
@@ -81,6 +93,7 @@ export default class Todo extends Component {
                         editFunc={this.handleEditDataFn}
                         deleteFunc={this.handleRemovedDataFn}
                         selectFunc={this.handleSelectFn}
+                        completeFunc={this.handleCompleteDataFn}
                     />
                 </div>
             </div>
