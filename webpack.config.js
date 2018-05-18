@@ -1,5 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const extractCSS = new ExtractTextPlugin('[name].bundle.css');
 
 module.exports = {
     mode: 'production',
@@ -30,6 +32,14 @@ module.exports = {
                             ]
                         }
                     }
+                ]
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
                 ]
             }
         ]

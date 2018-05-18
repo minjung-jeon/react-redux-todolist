@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import Button from '../button/button.js';
-import Icon from '../icon/icon.js';
+import Button from '../button/Button.js';
+import Icon from '../icon/Icon.js';
+
+import './TodoItem.scss';
 
 export default class TodoItem extends Component {
     constructor(props) {
