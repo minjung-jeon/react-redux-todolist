@@ -5,9 +5,6 @@ module.exports = {
     mode: 'development',
 
     entry: [
-        'react-hot-loader/patch',
-        'webpack-dev-server/client?http://0.0.0.0:3000',
-        'webpack/hot/only-dev-server',
         './src/index.js'
     ],
 
@@ -26,7 +23,8 @@ module.exports = {
     devServer: {
         inline: true,
         port: 3000,
-        hot: true
+        host: '0.0.0.0', //디폴트로는 "localhost" 로 잡혀있다. 외부에서 개발 서버에 접속해서 테스트하기 위해서는 '0.0.0.0'으로 설정해야 한다.
+        hot: true // 서버에서 HMR을 켠다.
     },
 
     module: {
