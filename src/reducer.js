@@ -13,7 +13,7 @@ const todoReducer = (state = todoState, action) => {
     switch (action.type) {
         case ADD_TODO:
             return ({
-                todos: update(state, {
+                todos: update(state.todos, {
                 $push: [
                     {
                         id: String(Date.now()),
@@ -26,7 +26,7 @@ const todoReducer = (state = todoState, action) => {
             });
         case COMPLETE_TODO:
             return ({
-                todos: update(state, {
+                todos: update(state.todos, {
                     [action.index] : {
                         completed : {$set: action.completed}
                     }
@@ -34,7 +34,7 @@ const todoReducer = (state = todoState, action) => {
             });
         case EDIT_TODO:
             return ({
-                todos: update(state, {
+                todos: update(state.todos, {
                     [action.index] : {
                         content: {$set: action.content},
                         isEdit: {$set: false}
@@ -43,7 +43,7 @@ const todoReducer = (state = todoState, action) => {
             });
         case DELETE_TODO:
             return ({
-                todos: update(state, {
+                todos: update(state.todos, {
                     $splice: [[action.index, 1]]
                 })
             });
@@ -52,5 +52,4 @@ const todoReducer = (state = todoState, action) => {
     }
 };
 
-export {todoReducer};
 export default todoReducer;
