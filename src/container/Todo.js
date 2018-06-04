@@ -1,102 +1,68 @@
 import React, {Component} from "react";
+import { connect } from 'react-redux';
 import update from 'immutability-helper';
+import {addTodo, completeTodo, editTodo, deleteTodo} from "../action";
+
 import TodoAdd from "../component/todo-add/TodoAdd";
 import TodoList from "../component/todo-list/TodoList";
 
-export default class Todo extends Component {
+class Todo extends Component {
     constructor(props) {
         super(props);
-
-        /**
-         * { todos : [{ id : number, content: string, completed : boolean }] }
-         */
-        this.state = {
-            todos: []
-        };
-
-        this.selectedKey = -1;
-
-        // 현재 context 를 바인딩한 새로운 함수를 생성
-        this.handleAddedDataFn = this.handleAddedData.bind(this);
-        this.handleRemovedDataFn = this.handleRemovedData.bind(this);
-        this.handleEditDataFn = this.handleEditData.bind(this);
-        this.handleSelectFn = this.handleSelect.bind(this);
-        this.handleCompleteDataFn = this.handleCompleteData.bind(this);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        console.log("shouldComponentUpdate");
-        return nextState.todos !== this.state.todos;
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     console.log("shouldComponentUpdate");
+    //     return nextState.todos !== this.props.store.getState().todos;
+    // }
+
+    handleAddedDataFn(content){
+        this.props.addData(content);
+    };
+
+    handleEditDataFn(index, content){
+        this.props.editData(index, content);
     }
 
-    handleSelect(idx){ // reset 할 때 idx없으면 -1로...
-        this.selectedKey = idx;
+    handleRemovedDataFn(index){
+        this.props.deleteData(index);
     }
 
-    handleAddedData(content) {
-        this.setState({
-            todos: update(this.state.todos, {
-                $push: [
-                    {
-                        id: String(Date.now()),
-                        content: content,
-                        completed: false,
-                        isEdit: false
-                    }
-                ]
-            })
-        });
-    }
-
-    handleRemovedData() {
-        this.setState({
-            todos: update(this.state.todos, {
-                $splice: [[this.selectedKey, 1]]
-            })
-        });
-        this.handleSelect(-1);
-    }
-
-    handleEditData(content) {
-        this.setState({
-            todos: update(this.state.todos, {
-                [this.selectedKey] : {
-                    content: {$set: content},
-                    isEdit: {$set: false}
-                }
-            })
-        });
-        this.handleSelect(-1); //reset
-    }
-
-    handleCompleteData(completed) {
-        this.setState({
-            todos: update(this.state.todos, {
-                [this.selectedKey] : {
-                    completed : {$set: completed}
-                }
-            })
-        })
+    handleCompleteDataFn(index, complete){
+        this.props.completeData(index, complete);
     }
 
     render() {
         console.log("Todo render");
+        const { todos } = this.props;
 
         return (
             <div className="g-row">
                 <div className="g-col">
-                    <TodoAdd handleAddedDataFn={this.handleAddedDataFn}/>
+                    <TodoAdd handleAddedDataFn={this.handleAddedDataFn.bind(this)}/>
                 </div>
                 <div className="g-col">
                     <TodoList
-                        todos={this.state.todos}
-                        editFunc={this.handleEditDataFn}
-                        deleteFunc={this.handleRemovedDataFn}
-                        selectFunc={this.handleSelectFn}
-                        completeFunc={this.handleCompleteDataFn}
+                        todos={todos}
+                        editFunc={this.handleEditDataFn.bind(this)}
+                        deleteFunc={this.handleRemovedDataFn.bind(this)}
+                        completeFunc={this.handleCompleteDataFn.bind(this)}
                     />
                 </div>
             </div>
         );
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    addData : (content) => dispatch(addTodo(content)),
+    editData: (index, content) => dispatch(editTodo(index, content)),
+    deleteData: (index) => dispatch(deleteTodo(index)),
+    completeData: (index, complete) => dispatch(completeTodo(index, complete))
+
+});
+const mapStateToProps = (state) => ({
+    todos : state.todos
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todo);

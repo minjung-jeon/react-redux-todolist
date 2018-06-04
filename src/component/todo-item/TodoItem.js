@@ -10,7 +10,7 @@ export default class TodoItem extends Component {
     constructor(props) {
         super(props);
 
-        this.onSavekEditItemFn = this.onSaveEditItem.bind(this);
+        this.onSaveEditItemFn = this.onSaveEditItem.bind(this);
         this.onClickDeleteItemFn = this.onClickDeleteItem.bind(this);
         this.onHandleKeyUpFn = this.onHandleKeyUp.bind(this);
         this.onStopEditingFn = this.onStopEditing.bind(this);
@@ -28,27 +28,24 @@ export default class TodoItem extends Component {
 
     onHandleKeyUp(event){
         if (event.keyCode === 13) {
-            this.onSavekEditItemFn(event);
+            this.onSaveEditItemFn(event);
         } else if (event.keyCode === 27) {
             this.onStopEditingFn();
         }
     }
 
     onSaveEditItem(event) {
-        this.props.selectFunc(this.props.index);
-
         if(this.state.isEdit === false){
             this.setState({isEdit : true});
         } else {
             const content = event.target.value;
-            this.props.editFunc(content);
+            this.props.editFunc(this.props.index, content);
             this.setState({isEdit : false});
         }
     }
 
     onClickDeleteItem() {
-        this.props.selectFunc(this.props.index);
-        this.props.deleteFunc(this.props.todo.id);
+        this.props.deleteFunc(this.props.index);
     }
 
     onStopEditing() {
@@ -61,8 +58,7 @@ export default class TodoItem extends Component {
 
     onToggleCompleted() {
         const todo = this.props.todo;
-        this.props.selectFunc(this.props.index);
-        this.props.completeFunc(!todo.completed);
+        this.props.completeFunc(this.props.index, !todo.completed);
     }
 
     renderTitle(task) {
@@ -137,6 +133,5 @@ TodoItem.propTypes = {
     index: PropTypes.number.isRequired,
     editFunc: PropTypes.func.isRequired,
     deleteFunc: PropTypes.func.isRequired,
-    selectFunc: PropTypes.func.isRequired,
     completeFunc: PropTypes.func.isRequired
 };

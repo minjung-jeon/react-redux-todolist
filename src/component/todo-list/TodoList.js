@@ -11,7 +11,6 @@ function TodoList({todos, editFunc, deleteFunc, selectFunc, completeFunc}) {
                 index={index}
                 editFunc={editFunc}
                 deleteFunc={deleteFunc}
-                selectFunc={selectFunc}
                 completeFunc={completeFunc}
             />
         );
@@ -28,7 +27,6 @@ TodoList.propTypes = {
     todos: PropTypes.array.isRequired,
     editFunc: PropTypes.func.isRequired,
     deleteFunc: PropTypes.func.isRequired,
-    selectFunc: PropTypes.func.isRequired,
     completeFunc: PropTypes.func.isRequired
 };
 
