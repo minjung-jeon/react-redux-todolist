@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import { connect } from 'react-redux';
-import update from 'immutability-helper';
-import {addTodo, completeTodo, editTodo, deleteTodo} from "../action";
+import {getTodo, addTodo, completeTodo, editTodo, deleteTodo} from "../action";
 
 import TodoAdd from "../component/todo-add/TodoAdd";
 import TodoList from "../component/todo-list/TodoList";
@@ -16,20 +15,8 @@ class Todo extends Component {
     //     return nextState.todos !== this.props.store.getState().todos;
     // }
 
-    handleAddedDataFn(content){
-        this.props.addData(content);
-    };
-
-    handleEditDataFn(index, content){
-        this.props.editData(index, content);
-    }
-
-    handleRemovedDataFn(index){
-        this.props.deleteData(index);
-    }
-
-    handleCompleteDataFn(index, complete){
-        this.props.completeData(index, complete);
+    componentDidMount() {
+        this.props.getTodos();
     }
 
     render() {
@@ -39,14 +26,14 @@ class Todo extends Component {
         return (
             <div className="g-row">
                 <div className="g-col">
-                    <TodoAdd handleAddedDataFn={this.handleAddedDataFn.bind(this)}/>
+                    <TodoAdd handleAddedDataFn={this.props.addData}/>
                 </div>
                 <div className="g-col">
                     <TodoList
                         todos={todos}
-                        editFunc={this.handleEditDataFn.bind(this)}
-                        deleteFunc={this.handleRemovedDataFn.bind(this)}
-                        completeFunc={this.handleCompleteDataFn.bind(this)}
+                        editFunc={this.props.editData}
+                        deleteFunc={this.props.deleteData}
+                        completeFunc={this.props.completeData}
                     />
                 </div>
             </div>
@@ -54,15 +41,22 @@ class Todo extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    addData : (content) => dispatch(addTodo(content)),
-    editData: (index, content) => dispatch(editTodo(index, content)),
-    deleteData: (index) => dispatch(deleteTodo(index)),
-    completeData: (index, complete) => dispatch(completeTodo(index, complete))
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getTodos : () => dispatch(getTodo()),
+        addData : (content) => dispatch(addTodo(content)),
+        editData: (index, content) => dispatch(editTodo(index, content)),
+        deleteData: (index) => dispatch(deleteTodo(index)),
+        completeData: (index, complete) => dispatch(completeTodo(index, complete))
+    }
+};
 
-});
-const mapStateToProps = (state) => ({
-    todos : state.todos
-});
+const mapStateToProps = (state) => {
+    const todos = state.get('todos').toJS();
+
+    return {
+        todos
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todo);

@@ -1,12 +1,18 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import todoReducer from './reducer';
 
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+
+import todoReducer from './reducer';
 import App from "./app/App.js";
 
-let store = createStore(todoReducer);
+let store = createStore(todoReducer, applyMiddleware(thunk));
+
+if (module.hot) {
+    module.hot.accept();
+}
 
 class Index {
     static main() {
