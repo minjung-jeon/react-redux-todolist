@@ -4,21 +4,26 @@
   "description": "",
   "main": "./src/App.js",
   "scripts": {
-    "build-dev": "webpack --mode development",
+    "clean" : "rm -rf build public/bundle.js",
     "build": "webpack --mode production",
-    "dev": "webpack-dev-server --open --mode development --config webpack.dev.config.js",
+    "start": "NODE_ENV=production node ./build/main.js",
+    "development": "NODE_ENV=development nodemon ./server/main.js --watch server"
   },
   "author": "minjung.jeon",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "classnames": "^2.2.5",
-    "immutability-helper": "^2.6.6",
+    "express": "^4.16.3",
     "immutable": "^3.8.2",
+    "mongoose": "^5.2.3",
     "prop-types": "^15.5.10",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -1,7 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const extractCSS = new ExtractTextPlugin('[name].bundle.css');
 
 module.exports = {
     mode: 'production',
@@ -9,7 +7,7 @@ module.exports = {
     entry: './src/index.js',
 
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: path.join(__dirname, 'public'),
         filename: 'bundle.js',
         publicPath: '/'
     },
@@ -26,10 +24,7 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: [
-                                ['env', {modules: false}],
-                                'react'
-                            ]
+                            presets: ['env', 'react']
                         }
                     }
                 ]
