@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import { connect } from 'react-redux';
 
 import Todo from "../container/Todo";
 import Header from "../component/header/Header";

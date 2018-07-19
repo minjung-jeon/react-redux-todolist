@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import { connect } from 'react-redux';
-import {getTodo, addTodo, completeTodo, editTodo, deleteTodo} from "../action";
+import {getTodoRequest, addTodoRequest, completeTodo, editTodo, deleteTodoRequest} from "../action";
 
 import TodoAdd from "../component/todo-add/TodoAdd";
 import TodoList from "../component/todo-list/TodoList";
@@ -43,8 +43,8 @@ class Todo extends Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getTodos : () => dispatch(getTodo()),
-        addData : (content) => dispatch(addTodo(content)),
+        getTodos : () => dispatch(getTodoRequest()),
+        addData : (content) => dispatch(addTodoRequest(content)),
         editData: (index, content) => dispatch(editTodo(index, content)),
         deleteData: (index) => dispatch(deleteTodo(index)),
         completeData: (index, complete) => dispatch(completeTodo(index, complete))

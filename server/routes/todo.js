@@ -3,6 +3,9 @@ const Todo = require('../models/todo');
 
 const router = express.Router();
 
+/*
+    READ TODOS : GET /api/todos
+ */
 router.get('/', (req, res) => {
     Todo.find()
         .exec((err, todos) => {
@@ -12,21 +15,22 @@ router.get('/', (req, res) => {
 });
 
 /*
-    CREATE TODOS
+    CREATE TODOS : POST /api/todos
     BODY SAMPLE : { "content" : "todocontent" }
     ERROR CODES:
         1: BAD CONTENT
  */
 router.post('/', (req, res) => {
+    let regexp = /[\#$<>\=_]/gi;
 
-    // if(!regexp.test(req.body.content)) {
-    //     return res.status(400).json({
-    //         error: "BAD CONTENT",
-    //         code: 1
-    //     });
-    // }
+    if(regexp.test(req.body.content)) {
+        console.log("BAD");
+        return res.status(400).json({
+            error: "BAD CONTENT",
+            code: 1
+        });
+    }
 
-    console.log("api", req.body);
     let todo = new Todo( {
         id: String(Date.now()),
         content: req.body.content
@@ -34,7 +38,10 @@ router.post('/', (req, res) => {
 
     todo.save(function(err){
         if(err) throw (err);
-        res.json({success: true});
+        res.json({
+            success: true,
+            todo: todo
+        });
     });
 });
 
