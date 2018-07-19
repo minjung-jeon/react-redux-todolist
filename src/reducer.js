@@ -3,9 +3,10 @@ import {
     ADD_TODO_FAILURE,
     GET_TODO_SUCCESS,
     GET_TODO_FAILURE,
+    DELETE_TODO_SUCCESS,
+    DELETE_TODO_FAILURE,
     COMPLETE_TODO,
-    EDIT_TODO,
-    DELETE_TODO
+    EDIT_TODO
 } from './action';
 import { Map, List, fromJS } from 'immutable';
 
@@ -31,6 +32,12 @@ const todoReducer = (state = todoState, action) => {
         case ADD_TODO_FAILURE:
             return state.update('error', error => error = List(fromJS(action.error)));
 
+        case DELETE_TODO_SUCCESS:
+            const index = todos.findIndex(i => i.get('id') === action.todo.id);
+            return state.set('todos', todos.delete(index));
+        case DELETE_TODO_FAILURE:
+            return state.update('error', error => error = List(fromJS(action.error)));
+
         case COMPLETE_TODO:
             return state.set('todos', todos.update(
                 action.index,
@@ -41,10 +48,6 @@ const todoReducer = (state = todoState, action) => {
                 action.index,
                 (todo) => todo.set('content', action.content)
                     .set('isEdit', false)
-            ));
-        case DELETE_TODO:
-            return state.set('todos', todos.delete(
-                action.index,
             ));
         default:
             return state;

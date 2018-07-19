@@ -45,7 +45,7 @@ export default class TodoItem extends Component {
     }
 
     onClickDeleteItem() {
-        this.props.deleteFunc(this.props.index);
+        this.props.deleteFunc(this.props.todo._id);
     }
 
     onStopEditing() {

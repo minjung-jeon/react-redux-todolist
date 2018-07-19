@@ -9,9 +9,11 @@ export const GET_TODO_FAILURE = 'GET_TODO_FAILURE';
 export const ADD_TODO_SUCCESS = 'ADD_TODO_SUCCESS';
 export const ADD_TODO_FAILURE = 'ADD_TODO_FAILURE';
 
+export const DELETE_TODO_SUCCESS = 'DELETE_TODO_SUCCESS';
+export const DELETE_TODO_FAILURE = 'DELETE_TODO_FAILURE';
+
 export const COMPLETE_TODO = 'COMPLETE_TODO';
 export const EDIT_TODO = 'EDIT_TODO';
-export const DELETE_TODO = 'DELETE_TODO';
 
 /*
  * action creators
@@ -70,6 +72,32 @@ export function addTodoFailure(error){
     }
 }
 
+/* DELETE TODO */
+export function deleteTodoRequest(id) {
+    return (dispatch) => {
+
+        return axios.delete('/api/todo/' + id)
+            .then((response) => {
+                dispatch(deleteTodoSuccess(response.data.todo))
+            }).catch((error) => {
+                dispatch(deleteTodoFailure(error));
+            })
+    }
+}
+
+export function deleteTodoSuccess(todo){
+    return {
+        type: DELETE_TODO_SUCCESS,
+        todo
+    }
+}
+
+export function deleteTodoFailure(error){
+    return {
+        type: DELETE_TODO_FAILURE,
+        error
+    }
+}
 
 export function completeTodo(index, completed) {
     return {
@@ -84,12 +112,5 @@ export function editTodo(index, content) {
         type: EDIT_TODO,
         index: index,
         content: content
-    }
-}
-
-export function deleteTodo(index) {
-    return {
-        type: DELETE_TODO,
-        index: index
     }
 }

@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
         });
     }
 
-    let todo = new Todo( {
+    const todo = new Todo( {
         id: String(Date.now()),
         content: req.body.content
     });
@@ -41,6 +41,32 @@ router.post('/', (req, res) => {
         res.json({
             success: true,
             todo: todo
+        });
+    });
+});
+
+/*
+    DELETE TODOS: DELETE /api/todos/:id
+    ERROR CODES:
+        1: NO RESOURCE
+ */
+router.delete('/:id', (req, res) => {
+    Todo.findById(req.params.id, (err, todo) => {
+        if(err) throw err;
+
+        if(!todo) {
+            return res.status(404).json({
+                error: "NO RESOURCE",
+                code: 1
+            })
+        }
+
+        Todo.remove({ _id: req.params.id }, err => {
+            if(err) throw err;
+            res.json({
+                success: true,
+                todo: todo
+            });
         });
     });
 });

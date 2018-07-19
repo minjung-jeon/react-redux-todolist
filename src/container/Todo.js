@@ -46,7 +46,7 @@ const mapDispatchToProps = (dispatch) => {
         getTodos : () => dispatch(getTodoRequest()),
         addData : (content) => dispatch(addTodoRequest(content)),
         editData: (index, content) => dispatch(editTodo(index, content)),
-        deleteData: (index) => dispatch(deleteTodo(index)),
+        deleteData: (index) => dispatch(deleteTodoRequest(index)),
         completeData: (index, complete) => dispatch(completeTodo(index, complete))
     }
 };
